@@ -1900,19 +1900,15 @@ function renderQuizStats() {
 }
 
 // ========== WHATSAPP SHARE ==========
-// Always share the canonical hosted URL, regardless of how this page was
-// opened (Netlify link, USB-distributed local file, etc.) — using
-// window.location.href here would send a broken file:// path when the
-// app is opened from a local copy instead of the live site.
-var HERTECH_CANONICAL_URL = 'https://hertech-chemistry.netlify.app';
 function shareOnWhatsApp() {
+  var hostedUrl = window.location.href.split('?')[0];
   var msg = encodeURIComponent(
     '🧪 *HerTech Chemistry* — Free interactive chemistry tool for Class 9–12 students!\n\n'
     + '✅ All 118 elements with 3D visualizers\n'
     + '✅ AI tutor that explains in Odia, Hindi & 6 more languages\n'
     + '✅ Virtual lab, equation balancer, NCERT notes\n'
     + '✅ Works offline — no app install needed\n\n'
-    + '👉 Open here: ' + HERTECH_CANONICAL_URL + '\n\n'
+    + '👉 Open here: ' + hostedUrl + '\n\n'
     + '_Spread this to every chemistry student you know! 🙏_'
   );
   window.open('https://wa.me/?text=' + msg, '_blank');
