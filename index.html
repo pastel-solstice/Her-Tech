@@ -1814,7 +1814,7 @@ body.compact-mode .cell .cn { display: none !important; }
 // ========== SECURITY & AVAILABILITY CHECKS ==========
 // API Security: detect if key is redacted or missing (no hardcoded key in this file)
 const HERTECH_API_AVAILABLE = (function() {
-  // This build uses anthropic-dangerous-direct-browser-access for demo.
+  // API calls are proxied through /api/chat; the API key stays server-side.
   // Set to true so live API calls work; set false if deploying without key.
   return true;
 })();
@@ -3951,18 +3951,12 @@ async function sendAIMsg(){
   ) : '';
 
   try {
-    /*
- * ARCHITECTURE NOTE (shown to judges):
- * In production, API calls are proxied through a backend endpoint (e.g. /api/chat)
- * so the API key is never exposed to the client. For this hackathon demo the key
- * is injected at runtime via a secure environment variable on the host server.
- * Direct browser calls are used here only for local demo convenience.
- */
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    // Calls the /api/chat proxy — the real Anthropic API key lives server-side only.
+    var resp = await fetch('https://hertech-ai-proxy.ayushimandal.workers.dev', {
       method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'claude-sonnet-5',
         max_tokens:400,
         system: 'You are an enthusiastic chemistry tutor for students (grades 8-12). Answer concisely in 2-4 sentences using simple language. Use relevant emojis. Context about the current element:\n' + elContext,
         messages:[{role:'user',content:q}]
@@ -3988,18 +3982,12 @@ async function predictReaction(){
   res.style.display='block';
   res.innerHTML='<div style="font-size:12px;color:var(--muted);padding:10px 0;">🤔 Predicting reaction...</div>';
   try {
-    /*
- * ARCHITECTURE NOTE (shown to judges):
- * In production, API calls are proxied through a backend endpoint (e.g. /api/chat)
- * so the API key is never exposed to the client. For this hackathon demo the key
- * is injected at runtime via a secure environment variable on the host server.
- * Direct browser calls are used here only for local demo convenience.
- */
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    // Calls the /api/chat proxy — the real Anthropic API key lives server-side only.
+    var resp = await fetch('https://hertech-ai-proxy.ayushimandal.workers.dev', {
       method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'claude-sonnet-5',
         max_tokens:500,
         system:'You are a chemistry expert. Given two reactants, provide: 1) Balanced equation, 2) Reaction type (synthesis/decomposition/displacement/redox/acid-base/precipitation/combustion), 3) One safety note, 4) One real-world example. Format as JSON: {"equation":"...","type":"...","safety":"...","example":"..."}. Only return valid JSON, no markdown.',
         messages:[{role:'user',content:'Reactant A: ' + a + '\nReactant B: ' + b}]
@@ -4479,18 +4467,12 @@ async function predictReactionFull(){
   ].join('\n');
 
   try {
-    /*
- * ARCHITECTURE NOTE (shown to judges):
- * In production, API calls are proxied through a backend endpoint (e.g. /api/chat)
- * so the API key is never exposed to the client. For this hackathon demo the key
- * is injected at runtime via a secure environment variable on the host server.
- * Direct browser calls are used here only for local demo convenience.
- */
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    // Calls the /api/chat proxy — the real Anthropic API key lives server-side only.
+    var resp = await fetch('https://hertech-ai-proxy.ayushimandal.workers.dev', {
       method:'POST',
-      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'claude-sonnet-5',
         max_tokens:700,
         system: system,
         messages:[{role:'user',content:prompt}]
@@ -4638,18 +4620,12 @@ async function sendAIMsg(){
 
   while(attempt <= maxRetries && !success){
     try {
-      /*
- * ARCHITECTURE NOTE (shown to judges):
- * In production, API calls are proxied through a backend endpoint (e.g. /api/chat)
- * so the API key is never exposed to the client. For this hackathon demo the key
- * is injected at runtime via a secure environment variable on the host server.
- * Direct browser calls are used here only for local demo convenience.
- */
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    // Calls the /api/chat proxy — the real Anthropic API key lives server-side only.
+    var resp = await fetch('https://hertech-ai-proxy.ayushimandal.workers.dev', {
         method:'POST',
-        headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+        headers:{'Content-Type':'application/json'},
         body: JSON.stringify({
-          model:'claude-sonnet-4-6',
+          model:'claude-sonnet-5',
           max_tokens:500,
           system: systemPrompt,
           messages: aiConversationHistory
@@ -4988,14 +4964,8 @@ async function predictReactionFull(){
   if(!document.getElementById('hmSpinKF')){var sk=document.createElement('style');sk.id='hmSpinKF';sk.textContent='@keyframes pulse {\n  0%, 100% { opacity: 1; transform: scale(1); }\n  50%       { opacity: 0.6; transform: scale(1.15); }\n}\n@keyframes hmSpin{to{transform:rotate(360deg)}}';document.head.appendChild(sk);}
   var prompt=freeText.trim()?freeText.trim():'Reactant A: '+a.trim()+'\nReactant B: '+b.trim();
   try{
-    /*
-     * ARCHITECTURE NOTE (shown to judges):
-     * In production, API calls are proxied through a backend endpoint (e.g. /api/chat)
-     * so the API key is never exposed to the client. For this hackathon demo the key
-     * is injected at runtime via a secure environment variable on the host server.
-     * Direct browser calls are used here only for local demo convenience.
-     */
-    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:600,system:'You are an expert chemistry teacher. Return ONLY valid JSON (no markdown) with keys: {"equation":"balanced eq with → arrow","type":"reaction type","confidence":85,"why":"2-3 sentences molecular explanation","oxidation":"oxidation state changes or null","energy":"energy change","safety":"safety note","example":"real-world application","steps":["step1","step2","step3"]}',messages:[{role:'user',content:prompt}]})});
+    // Calls the /api/chat proxy — the real Anthropic API key lives server-side only.
+    var resp=await fetch('https://hertech-ai-proxy.ayushimandal.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-5',max_tokens:600,system:'You are an expert chemistry teacher. Return ONLY valid JSON (no markdown) with keys: {"equation":"balanced eq with → arrow","type":"reaction type","confidence":85,"why":"2-3 sentences molecular explanation","oxidation":"oxidation state changes or null","energy":"energy change","safety":"safety note","example":"real-world application","steps":["step1","step2","step3"]}',messages:[{role:'user',content:prompt}]})});
     if(!resp.ok)throw new Error('HTTP '+resp.status);
     var data=await resp.json();
     var raw=data.content&&data.content[0]?data.content[0].text:'';
@@ -5145,14 +5115,8 @@ async function sendAIMsg(){
   var success=false;
   while(attempt<=maxRetries&&!success){
     try{
-      /*
-     * ARCHITECTURE NOTE (shown to judges):
-     * In production, API calls are proxied through a backend endpoint (e.g. /api/chat)
-     * so the API key is never exposed to the client. For this hackathon demo the key
-     * is injected at runtime via a secure environment variable on the host server.
-     * Direct browser calls are used here only for local demo convenience.
-     */
-    var resp=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:450,system:systemPrompt,messages:aiConversationHistory})});
+    // Calls the /api/chat proxy — the real Anthropic API key lives server-side only.
+    var resp=await fetch('https://hertech-ai-proxy.ayushimandal.workers.dev',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-5',max_tokens:450,system:systemPrompt,messages:aiConversationHistory})});
       if(!resp.ok)throw new Error('HTTP '+resp.status+' — '+resp.statusText);
       var data=await resp.json();
       var answer=data.content&&data.content[0]?data.content[0].text:'No response received.';
@@ -7561,18 +7525,12 @@ async function sendAIMsg() {
   var attempt = 0, success = false;
   while (attempt <= 2 && !success) {
     try {
-      /*
- * ARCHITECTURE NOTE (shown to judges):
- * In production, API calls are proxied through a backend endpoint (e.g. /api/chat)
- * so the API key is never exposed to the client. For this hackathon demo the key
- * is injected at runtime via a secure environment variable on the host server.
- * Direct browser calls are used here only for local demo convenience.
- */
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    // Calls the /api/chat proxy — the real Anthropic API key lives server-side only.
+    var resp = await fetch('https://hertech-ai-proxy.ayushimandal.workers.dev', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
+          model: 'claude-sonnet-5',
           max_tokens: 1024,
           system: sys,
           messages: aiHistory
@@ -7643,17 +7601,11 @@ async function predictReactionFull() {
   var sys = 'You are an expert chemistry teacher. Return ONLY valid JSON (no markdown, no triple backticks) with exactly these keys: {"equation":"balanced eq with → arrow","type":"reaction classification","confidence":85,"why":"2-3 sentence molecular explanation","oxidation":"oxidation state changes or null","energy":"ΔH / energy change","safety":"safety note","example":"real-world application","steps":["step 1","step 2","step 3"]}';
 
   try {
-    /*
- * ARCHITECTURE NOTE (shown to judges):
- * In production, API calls are proxied through a backend endpoint (e.g. /api/chat)
- * so the API key is never exposed to the client. For this hackathon demo the key
- * is injected at runtime via a secure environment variable on the host server.
- * Direct browser calls are used here only for local demo convenience.
- */
-    var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    // Calls the /api/chat proxy — the real Anthropic API key lives server-side only.
+    var resp = await fetch('https://hertech-ai-proxy.ayushimandal.workers.dev', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true' },
-      body: JSON.stringify({ model:'claude-sonnet-4-6', max_tokens:600, system:sys, messages:[{role:'user',content:prompt}] })
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model:'claude-sonnet-5', max_tokens:600, system:sys, messages:[{role:'user',content:prompt}] })
     });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     var data = await resp.json();
@@ -8493,18 +8445,12 @@ async function sendNcertAI() {
   var success = false;
   while (attempt <= 2 && !success) {
     try {
-      /*
-       * ARCHITECTURE NOTE (shown to judges):
-       * In production, API calls are proxied through a backend endpoint (e.g. /api/chat)
-       * so the API key is never exposed to the client. For this hackathon demo the key
-       * is injected at runtime via a secure environment variable on the host server.
-       * Direct browser calls are used here only for local demo convenience.
-       */
-      var resp = await fetch('https://api.anthropic.com/v1/messages', {
+    // Calls the /api/chat proxy — the real Anthropic API key lives server-side only.
+      var resp = await fetch('https://hertech-ai-proxy.ayushimandal.workers.dev', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'anthropic-dangerous-direct-browser-access': 'true' },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
+          model: 'claude-sonnet-5',
           max_tokens: 1024,
           system: systemPrompt,
           messages: ncertAiHistory
