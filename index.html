@@ -4609,6 +4609,7 @@ async function sendAIMsg(){
   var systemPrompt = [
     'You are ChemBot, an enthusiastic chemistry tutor for students (grades 8-12).',
     'Answer clearly using markdown: **bold**, *italic*, bullet points, chemical formulas.',
+    'Never use LaTeX or dollar-sign math notation (no $...$ or \\text{}); write electron configurations and exponents as plain text, e.g. 3s2 3p2 or 3s^2 3p^2.',
     'For equations use → (not =). Keep answers 3-5 sentences unless detail is needed.',
     'Always include a relevant emoji. Be encouraging and student-friendly.',
     'Current element context:\n'+elContext
@@ -5109,7 +5110,7 @@ async function sendAIMsg(){
     'Oxid states: '+((currentEl.ox||[]).join(', '))
   ].join('\n'):'General chemistry question — no specific element context.';
 
-  var systemPrompt='You are ChemBot, an enthusiastic chemistry tutor. Use markdown: **bold**, bullet points. Keep answers 3-5 sentences unless detail needed. Include a relevant emoji. Be encouraging and student-friendly. Current element context:\n'+elCtx;
+  var systemPrompt='You are ChemBot, an enthusiastic chemistry tutor. Use markdown: **bold**, bullet points. Never use LaTeX or dollar-sign math notation; write electron configs and exponents as plain text like 3s2 3p2. Keep answers 3-5 sentences unless detail needed. Include a relevant emoji. Be encouraging and student-friendly. Current element context:\n'+elCtx;
   var maxRetries=2;
   var attempt=0;
   var success=false;
@@ -7520,7 +7521,7 @@ async function sendAIMsg() {
     'Fun fact: ' + (el.fact || 'N/A')
   ].join('\n') : 'General chemistry question.';
 
-  var sys = 'You are ChemBot, an enthusiastic chemistry tutor for grades 8-12. Use markdown (bold, bullets). Keep answers concise — 3-5 sentences unless more detail is genuinely needed. Include a relevant emoji. Be encouraging.\n\nCurrent element context:\n' + ctx;
+  var sys = 'You are ChemBot, an enthusiastic chemistry tutor for grades 8-12. Use markdown (bold, bullets). Never use LaTeX or dollar-sign math notation; write electron configs and exponents as plain text like 3s2 3p2. Keep answers concise — 3-5 sentences unless more detail is genuinely needed. Include a relevant emoji. Be encouraging.\n\nCurrent element context:\n' + ctx;
 
   var attempt = 0, success = false;
   while (attempt <= 2 && !success) {
